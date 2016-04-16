@@ -1,9 +1,0 @@
-// Uses the exports shortcut to define the module.exports perimeter method
-exports.perimeter = function(x, y) {
-  return (2*(x + y));
-}
-// Uses the exports shortcut to define the module.exports area method
-exports.area = function(x, y) {
-  return (x * y);
-}
-
