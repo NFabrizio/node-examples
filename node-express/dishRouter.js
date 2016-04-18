@@ -22,9 +22,9 @@ var bodyParser = require('body-parser');
  * deleted. Also handles GET, POST and DELETE requests for the /:dishId route, which would
  * actually be /dishes/:dishId for this application. It handles these so that data for an
  * existing dish could be retrieved, an existing dish could be updated or an existing dish could
- * be deleted. This is set up as a function so that it can be properly exported in Node, and it
- * returns the dishRouter, which will contain the message for the appropriate route and request
- * method.
+ * be deleted. This is set up as an anonymous function that is automatically called so that it
+ * can be properly exported in Node, and it returns the dishRouter, which will contains the
+ * message for the appropriate route and request method.
  *
  * @see express.Router()
  * @see bodyParser.json()

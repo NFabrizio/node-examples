@@ -23,9 +23,9 @@ var bodyParser = require('body-parser');
  * promotions could be deleted. Also handles GET, POST and DELETE requests for the /:promoId
  * route, which would actually be /promotions/:promoId for this application. It handles these
  * so that data for an existing promotion could be retrieved, an existing promotion could be
- * updated or an existing promotion could be deleted. This is set up as a function so that it
- * can be properly exported in Node, and it returns the promoRouter, which will contains the
- * message for the appropriate route and request method.
+ * updated or an existing promotion could be deleted. This is set up as an anonymous function
+ * that is automatically called so that it can be properly exported in Node, and it returns the
+ * promoRouter, which will contains the message for the appropriate route and request method.
  *
  * @see express.Router()
  * @see bodyParser.json()

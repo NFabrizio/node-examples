@@ -23,9 +23,9 @@ var bodyParser = require('body-parser');
  * could be deleted. Also handles GET, POST and DELETE requests for the /:leaderId route, which
  * would actually be /leaders/:leaderId for this application. It handles these so that data for
  * an existing leader could be retrieved, an existing leader could be updated or an existing
- * leader could be deleted. This is set up as a function so that it can be properly exported in
- * Node, and it returns the leaderRouter, which will contain the message for the appropriate
- * route and request method.
+ * leader could be deleted. This is set up as an anonymous function
+ * that is automatically called so that it can be properly exported in Node, and it returns the
+ * leaderRouter, which will contains the message for the appropriate route and request method.
  *
  * @see express.Router()
  * @see bodyParser.json()

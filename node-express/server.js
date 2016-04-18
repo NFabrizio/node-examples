@@ -25,7 +25,7 @@ var app = express();
 // Set up app to use morgan for logging
 app.use(morgan('dev'));
 
-
+console.log(req);
 // Apply the routers to appropriate routes
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
