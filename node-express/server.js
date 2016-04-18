@@ -28,7 +28,7 @@ app.use(morgan('dev'));
 // Apply the routers to appropriate routes
 app.use('/dishes', dishRouter);
 app.use('/promotions', promoRouter);
-app.use('/leaders', leaderRouter);
+app.use('/leadership', leaderRouter);
 
 // Set up the public directory as the location for static files using a relative path to the directory
 app.use(express.static(__dirname + '/public'));

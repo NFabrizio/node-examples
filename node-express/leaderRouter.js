@@ -1,10 +1,10 @@
 /**
- * leaderRouter Node module that handles /leaders route
+ * leaderRouter Node module that handles /leadership route
  *
- * A Node file module that handles the /leaders and /leaders/:leaderId routes. Sets up an
+ * A Node file module that handles the /leadership and /leadership/:leaderId routes. Sets up an
  * Express Router instance and handles JSON request body with bodyParser. Sets up route
- * handling for GET, POST and DELETE requests for the /leaders route and GET, PUT and DELETE 
- * requests for the /leaders/:leaderId route. Currently, not connected to a database, so
+ * handling for GET, POST and DELETE requests for the /leadership route and GET, PUT and DELETE 
+ * requests for the /leadership/:leaderId route. Currently, not connected to a database, so
  * returns a message stating what would happen if it were connected to a database, but does not 
  * actually do anything.
  */
@@ -18,10 +18,10 @@ var bodyParser = require('body-parser');
  *
  * Starts by setting up the Express Router and telling it to use the bodyParser to parse any
  * JSON objects passed into the route. Sets up handling for the / route, which would actually
- * be /leaders for this application. Handles GET, PUT and DELETE requests for that route so that
- * data for existing leaders could be retrieved, a new leader could be added or all leaders
+ * be /leadership for this application. Handles GET, PUT and DELETE requests for that route so
+ * that data for existing leaders could be retrieved, a new leader could be added or all leaders
  * could be deleted. Also handles GET, POST and DELETE requests for the /:leaderId route, which
- * would actually be /leaders/:leaderId for this application. It handles these so that data for
+ * would actually be /leadership/:leaderId for this application. It handles these so that data for
  * an existing leader could be retrieved, an existing leader could be updated or an existing
  * leader could be deleted. This is set up as an anonymous function
  * that is automatically called so that it can be properly exported in Node, and it returns the
