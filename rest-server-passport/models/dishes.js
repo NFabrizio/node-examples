@@ -18,7 +18,7 @@ var Schema = mongoose.Schema;
 require('mongoose-currency').loadType(mongoose);
 var Currency = mongoose.Types.Currency;
 
-// Create the comments schema
+// Create the comments schema and references the ObjectId for the user in the User schema so that we can cross-reference the user data with Mongoose populations
 var commentSchema = new Schema({
   rating: {
     type: Number,
@@ -30,9 +30,9 @@ var commentSchema = new Schema({
     type: String,
     required: true
   },
-  author: {
-    type: String,
-    required: true
+  postedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
   }
 },
 {

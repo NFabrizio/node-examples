@@ -26,8 +26,18 @@ router.post('/register', function(req, res) {
 
     // If successful, send a success message with status of 200
     } else {
-      passport.authenticate('local')(req, res, function() {
-        return res.status(200).json({ status: 'Registration successful!' });
+      // Check if there is a firstname and lastname in the request and if so, add them to the user object
+      if(req.body.firstname) {
+        user.firstname = req.body.firstname;
+      }
+      if(req.body.lastname) {
+        user.lastname = req.body.lastname;
+      }
+      // Save the changes to the user object
+      user.save(function(err, user) {
+        passport.authenticate('local')(req, res, function() {
+          return res.status(200).json({ status: 'Registration successful!' });
+        });
       });
     }
   });

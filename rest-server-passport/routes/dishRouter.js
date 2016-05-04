@@ -71,7 +71,9 @@ dishRouter.use(bodyParser.json());
 dishRouter.route('/')
 // Return all dish documents in the Mongo database for valid GET requests
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  Dishes.find({}, function(err, dish) {
+  Dishes.find({})
+  .populate('comments.postedBy')
+  .exec(function(err, dish) {
     if(err) {
       throw err; 
     } else {
@@ -107,7 +109,9 @@ dishRouter.route('/')
 dishRouter.route('/:dishId')
 // Return the specified dish for valid GET requests
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  Dishes.findById(req.params.dishId, function(err, dish) {
+  Dishes.findById(req.params.dishId)
+  .populate('comments.postedBy')
+  .exec(function(err, dish) {
     if(err) {
       throw err; 
     } else {
@@ -142,9 +146,12 @@ dishRouter.route('/:dishId')
 
 // Set up rules for the /:dishId/comments route, where :dishId can be any string passed in the URL
 dishRouter.route('/:dishId/comments')
+.all(Verify.verifyOrdinaryUser)
 // Return the comments for the specified dish for valid GET requests
 .get(function(req, res, next) {
-  Dishes.findById(req.params.dishId, function(err, dish) {
+  Dishes.findById(req.params.dishId)
+  .populate('comments.postedBy')
+  .exec(function(err, dish) {
     if(err) {
       throw err; 
     } else {
@@ -158,6 +165,8 @@ dishRouter.route('/:dishId/comments')
     if(err) {
       throw err; 
     } else {
+      // Set up the variable with the user record id
+      req.body.postedBy = req.decoded._doc._id;
       dish.comments.push(req.body);
       dish.save(function(err, dish) {
       if(err) {
@@ -169,8 +178,8 @@ dishRouter.route('/:dishId/comments')
     }
   });
 })
-// Delete the comments for the specified dish for valid DELETE requests
-.delete(function(req, res, next) {
+// Delete all comments for the specified dish for valid DELETE requests
+.delete(Verify.verifyAdmin, function(req, res, next) {
   Dishes.findById(req.params.dishId, function(err, dish) {
     if(err) {
       throw err; 
@@ -191,9 +200,12 @@ dishRouter.route('/:dishId/comments')
 
 // Set up rules for the /:dishId/comments/:commentId route, where :dishId can be any string passed in the URL and :commentId can be any string passed in the URL
 dishRouter.route('/:dishId/comments/:commentId')
+.all(Verify.verifyOrdinaryUser)
 // Return the specified comment for valid GET requests
 .get(function(req, res, next) {
-  Dishes.findById(req.params.dishId, function(err, dish) {
+  Dishes.findById(req.params.dishId)
+  .populate('comments.postedBy')
+  .exec(function(err, dish) {
     if(err) {
       throw err; 
     } else {
@@ -208,6 +220,8 @@ dishRouter.route('/:dishId/comments/:commentId')
       throw err; 
     } else {
       dish.comments.id(req.params.commentId).remove();
+      // Set up the variable with the user record id
+      req.body.postedBy = req.decoded._doc._id;
       dish.comments.push(req.body);
       dish.save(function(err, dish) {
       if(err) {
@@ -222,8 +236,11 @@ dishRouter.route('/:dishId/comments/:commentId')
 // Delete the specified comment for valid DELETE requests
 .delete(function(req, res, next) {
   Dishes.findById(req.params.dishId, function(err, dish) {
-    if(err) {
-      throw err; 
+    // Only allow deletion of comments if the user submitting the request is the one who created the comment
+    if(dish.comments.id(req.params.commentId).postedBy != req.decoded._doc._id) {
+      var err = new Error('You are not authorized to perform this operation!');
+      err.status = 403;
+      return next(err); 
     } else {
       dish.comments.id(req.params.commentId).remove();
       dish.save(function(err, resp) {
