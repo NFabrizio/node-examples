@@ -114,17 +114,22 @@ favoritesRouter.route('/')
             res.json(fav);
           }
         });
-      // If there is a favorites record for the user, push the dishId into the dishes array and save changes
+      // If there is a favorites record for the user, push the dishId into the dishes array and save changes if the dishId does not already exist in the array
       } else {
-        favorite.dishes.push(dishId);
-        favorite.save(function(err, fav) {
-          if(err) {
-            throw err; 
-          } else {
-            console.log("Added favorite!");
-            res.json(fav);
-          }
-        });
+        // Check if the dishId already exists in the dishes array
+        if(favorite.dishes.indexOf(dishId) > -1) {
+          res.json("Dish ID already exists in favorites list!");
+        } else {
+          favorite.dishes.push(dishId);
+          favorite.save(function(err, fav) {
+            if(err) {
+              throw err; 
+            } else {
+              console.log("Added favorite!");
+              res.json(fav);
+            }
+          });
+        }
       }
     }
   });
