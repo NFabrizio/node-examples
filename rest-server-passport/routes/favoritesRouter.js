@@ -66,9 +66,9 @@ favoritesRouter.use(bodyParser.json());
 
 // Set up rules for the / route
 favoritesRouter.route('/')
-// Return all favorite documents in the Mongo database for valid GET requests
+// Return all favorite documents in the Mongo database for valid GET requests for the logged in user
 .get(Verify.verifyOrdinaryUser, function(req, res, next) {
-  Favorites.find({})
+  Favorites.find({postedBy: req.decoded._doc._id})
   // Populate the postedBy and dishes fields in the response based on what was defined in the schema
   .populate('postedBy dishes')
   .exec(function(err, favorite) {
@@ -134,9 +134,9 @@ favoritesRouter.route('/')
     }
   });
 })
-// Delete all favorites for valid DELETE requests after verifying the user
+// Delete all favorites for valid DELETE requests for the logged in user after verifying the user
 .delete(Verify.verifyOrdinaryUser, function(req, res, next) {
-  Favorites.remove({}, function(err, resp) {
+  Favorites.remove({postedBy: req.decoded._doc._id}, function(err, resp) {
     if(err) {
       throw err; 
     } else {
@@ -151,7 +151,7 @@ favoritesRouter.route('/:dishId')
 .delete(Verify.verifyOrdinaryUser, function(req, res, next) {
   var dishId = req.params.dishId;
   // Find favorites with a dishes array that contains the specified dishId
-  Favorites.findOne({ dishes: dishId }, function(err, fav) {
+  Favorites.findOne({ postedBy: req.decoded._doc._id, dishes: dishId }, function(err, fav) {
     if(err) {
       throw err; 
     } else {
